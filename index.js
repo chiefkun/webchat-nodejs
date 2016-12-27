@@ -84,8 +84,10 @@ io.on('connection', function(socket){
 io.on('connection', function(socket){
   socket.on('chat messages', function(msg){
     console.log('messages: ' + msg.msg);
-    socket.broadcast.emit('other_messages', msg);
-    socket.emit('self_messages', msg.msg);
+		db.saveMsg(msg, function(data){
+			socket.broadcast.emit('other_messages', msg);
+	    socket.emit('self_messages', msg);
+		});
   });
 });
 
