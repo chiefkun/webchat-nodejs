@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title Web Chat
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet" type="text/css" href="css/bootstrap.min.css")
+    link(rel="stylesheet" type="text/css" href="css/login.css")
+    script(src="js/jquery-3.1.1.min.js")
+    script(src="js/bootstrap.min.js")
+  body
+    div.login-page
+      div.form
+        form.register-form(action="register" method="post")
+          input(type="text" name="username" placeholder="name" autocomplete="off")/
+          input(type="password" name="password" placeholder="password" autocomplete="off")/
+          button(type="submit") Create
+          p.message Already registered?
+            a(href="#") Sign In
+        form.login-form(action="login" method="post")
+          input(type="text" name="username" placeholder="name" autocomplete="off")/
+          input(type="password" name="password" placeholder="password" autocomplete="off")/
+          button(type="submit") Login
+          p.message Not registered?
+            a(href="#") Create an account
+    script(type="text/javascript").
+      $('.message').click(function(){
+        $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+      });

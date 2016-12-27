@@ -1,0 +1,15 @@
+{
+    "database": "WEBCHAT",
+    "username": "postgres",
+    "password": "postgres",
+    "host": "192.168.17.59",
+    "port": 5432,
+    "dialect": "postgres",
+    "pool": {
+        "min": 0,
+        "max": 5,
+        "idle": 10000
+    },
+    "isCreated": false,
+    "default_ava_path": "img/default_ava.png"
+}

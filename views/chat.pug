@@ -1,0 +1,70 @@
+doctype html
+html
+  head
+    title Web chat
+    link(rel="stylesheet" href="css/bootstrap.min.css")
+    link(rel="stylesheet" href="css/sidebar.css")
+    link(rel="stylesheet" href="css/master.css")
+  body
+    div.wrapper
+      div.sidebar#sidebar
+        form(action="logout" method="post")
+          button.btn.btn-inf.btn-lg(type="submit")
+            span.glyphicon.glyphicon-log-out
+            |Log out
+      div.main_content#main_content
+        div.menu
+          div.back(onclick="openSidebar()")
+            i.fa.fa-chevron-right#menu_sidebar_icon
+            img#self_avatar(src=ava draggable="false")/
+          div.name  #{name}
+          // div.last
+        ol.chat
+        form#chat_form(action="")
+          input.textarea#m(type="text" placeholder="Type here!" autocomplete="off")/
+          div.emojis
+    // Javascript library
+    script(src="/socket.io/socket.io.js")
+    script(src="js/jquery-3.1.1.min.js")
+    script(src="js/js/bootstrap.min.js")
+    script(src="js/sidebar.js")
+    script(type="text/javascript").
+      var username = "#{username}";
+      var ava_path = "#{ava}";
+      var socket = io();
+      $('#chat_form').submit(function(){
+        var msg = {username: username, name: "#{name}", avatar: ava_path, msg: $('#m').val()};
+        socket.emit('chat messages', msg);
+        $('#m').val('');
+        return false;
+      });
+      socket.on('self_messages', function(msg){
+        var self_ava = $('<div>').addClass("avatar").append($('<img>'));
+        self_ava.children('img').attr("src", ava_path).attr("draggable", false).attr("data-toggle", "tooltip").attr("title", "#{name}");
+        var self_msg = $('<div>').addClass('msg').append($('<p>')).append($('<time>'));
+        self_msg.children('p').text(msg);
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
+        self_msg.children('time').text(time);
+        var self_m = $('<li>').addClass("self").append(self_ava).append(self_msg);
+        $('ol').append(self_m);
+      });
+
+      socket.on('other_messages', function(msg){
+        var other_ava = $('<div>').addClass("avatar").append($('<img>'));
+        other_ava.children('img').attr("src", msg.avatar).attr("draggable", false).attr("data-toggle", "tooltip").attr("title", msg.name);
+        var other_msg = $('<div>').addClass('msg').append($('<p>')).append($('<time>'));
+        other_msg.children('p').text(msg.msg);
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
+        other_msg.children('time').text(time);
+        var other_m = $('<li>').addClass("other").append(other_ava).append(other_msg);
+        $('ol').append(other_m);
+      });
+
+      $('.textarea').keydown(function(event){
+        if(event.keyCode == 13){
+          $("#chat_form").submit();
+          return false;
+        }
+      });
