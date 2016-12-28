@@ -2,9 +2,10 @@ doctype html
 html
   head
     title Web chat
-    link(rel="stylesheet" href="css/bootstrap.min.css")
-    link(rel="stylesheet" href="css/sidebar.css")
-    link(rel="stylesheet" href="css/master.css")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet" type="text/css" href="css/bootstrap.min.css")
+    link(rel="stylesheet" type="text/css" href="css/sidebar.css")
+    link(rel="stylesheet" type="text/css" href="css/master.css")
   body
     div.wrapper
       div.sidebar#sidebar
@@ -19,19 +20,39 @@ html
             img#self_avatar(src=ava draggable="false")/
           div.name  #{name}
           // div.last
+        - var history = {msgList};
+        - var ssname = {sessionname};
         ol.chat
+          each msgLs in history
+            each msg in msgLs
+              if (msg.username == ssname.sessionname)
+                li.self
+                  .avatar
+                    img(data-toggle="tooltip" title = msg.name src = msg.avatar draggable="false")
+                  .msg
+                    p #{msg.message}
+                    time #{msg.time}
+              else
+                li.other
+                  .avatar
+                    img(data-toggle="tooltip" title = msg.name src = msg.avatar draggable="false")
+                  .msg
+                    p #{msg.message}
+                    time #{msg.time}
         form#chat_form(action="")
           input.textarea#m(type="text" placeholder="Type here!" autocomplete="off")/
           div.emojis
     // Javascript library
     script(src="/socket.io/socket.io.js")
     script(src="js/jquery-3.1.1.min.js")
-    script(src="js/js/bootstrap.min.js")
+    //script(src="js/js/bootstrap.min.js")
     script(src="js/sidebar.js")
     script(type="text/javascript").
       var socket = io();
       $('#chat_form').submit(function(){
-        var msg = {username: "#{username}", name: "#{name}", avatar: "#{ava}", msg: $('#m').val()};
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
+        var msg = {username: "#{uniquename}", name: "#{name}", avatar: "#{ava}", time: time, msg: $('#m').val()};
         socket.emit('chat messages', msg);
         $('#m').val('');
         return false;
@@ -40,10 +61,8 @@ html
         var self_ava = $('<div>').addClass("avatar").append($('<img>'));
         self_ava.children('img').attr("src", msg.avatar).attr("draggable", false).attr("data-toggle", "tooltip").attr("title", msg.name);
         var self_msg = $('<div>').addClass('msg').append($('<p>')).append($('<time>'));
-        self_msg.children('p').text(msg.msg);
-        var dt = new Date();
-        var time = dt.getHours() + ":" + dt.getMinutes();
-        self_msg.children('time').text(time);
+        self_msg.children('p').text(msg.message);
+        self_msg.children('time').text(msg.time);
         var self_m = $('<li>').addClass("self").append(self_ava).append(self_msg);
         $('ol').append(self_m);
       });
@@ -52,10 +71,8 @@ html
         var other_ava = $('<div>').addClass("avatar").append($('<img>'));
         other_ava.children('img').attr("src", msg.avatar).attr("draggable", false).attr("data-toggle", "tooltip").attr("title", msg.name);
         var other_msg = $('<div>').addClass('msg').append($('<p>')).append($('<time>'));
-        other_msg.children('p').text(msg.msg);
-        var dt = new Date();
-        var time = dt.getHours() + ":" + dt.getMinutes();
-        other_msg.children('time').text(time);
+        other_msg.children('p').text(msg.message);
+        other_msg.children('time').text(msg.time);
         var other_m = $('<li>').addClass("other").append(other_ava).append(other_msg);
         $('ol').append(other_m);
       });
