@@ -1,0 +1,30 @@
+{
+  "db": {
+    "database": "WEBCHAT",
+    "username": "postgres",
+    "password": "postgres",
+    "options": {
+      "host": "192.168.17.59",
+      "port": 5432,
+      "dialect": "postgres",
+      "pool": {
+          "min": 0,
+          "max": 5,
+          "idle": 10000
+      },
+      "define": {
+    		"timestamps": false
+    	}
+    },
+    "isCreated": false,
+    "default_ava_path": "img/default_ava.png"
+  },
+  "session": {
+    "secret": "this is sercet key",
+    "resave": false,
+    "saveUninitialized": true,
+    "cookie": {
+      "maxAge": 60000000
+    }
+  }
+}

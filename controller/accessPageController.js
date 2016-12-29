@@ -1,6 +1,5 @@
 "use strict";
 var userRepository = require("../repository/userRepository");
-var historyRepository = require("../repository/historyRepository");
 
 function postLogin(req, res) {
   console.log('IN - Post Login');
@@ -10,17 +9,11 @@ function postLogin(req, res) {
     .then(function(user) {
       if(user) {
         req.session.user = user.username;
-        historyRepository.getHistory(50)
-        .then(function(msgList) {
-          res.render('chat', {name: user.name, uniquename: user.username, ava: user.avatar, msgList: msgList, sessionname: req.session.user});
-          res.end();
-          console.log('OUT - Post Login');
-        });
-        // TO DO: catch exception
+        res.redirect('/');
       } else {
         // TO DO: handle error alert
   			res.redirect('/');
-        console.log('OUT - Post Login');
+        console.log('OUT - Post Login: Fail');
       }
     });
     // TO DO: catch exception
@@ -35,17 +28,12 @@ function postRegister(req, res) {
     .then(function(user) {
       if(user){
         req.session.user = user.username;
-        historyRepository.getHistory(50)
-        .then(function(msgList) {
-          res.render('chat', {name: user.name, uniquename: user.username, ava: user.avatar, msgList: msgList, sessionname: req.session.user});
-          res.end();
-          console.log('OUT - Post Reg');
-        });
+        res.redirect('/');
         // TO DO: catch exception
   		} else {
   			// TO DO: handle error alert
   			res.redirect('/');
-        console.log('OUT - Post Reg');
+        console.log('OUT - Post Reg: Success');
   		}
     });
     // TO DO: catch exception

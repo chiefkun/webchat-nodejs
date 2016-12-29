@@ -1,17 +1,18 @@
 "use strict";
-var db = require('./models');
-const pug = require('pug');
-var pageController = require("./controller/pageController.js");
-var accessPageController = require("./controller/accessPageController.js");
-var config = require('./config.json');
-var historyRepository = require("./repository/historyRepository.js");
+const db = require('./models');
+
+const config = require('./config/config');
+
+const pageController = require("./controller/pageController.js");
+const accessPageController = require("./controller/accessPageController.js");
+const historyRepository = require("./repository/historyRepository.js");
 
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var session = require('express-session');
-var bodyParser = require('body-parser');
+
+require('./config/express')(app, config);
 
 db.sequelize.sync({force: config.db.isCreated})
 	.then(function() {
@@ -23,18 +24,7 @@ db.sequelize.sync({force: config.db.isCreated})
 		throw new Error(e);
   });
 
-// Sering static folder
-app.use(express.static('views'));
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
-app.use(session({ secret: 'this is sercet key', resave: false,  saveUninitialized: true, cookie: { maxAge: 60000000 }}));
-
-app.set('view engine', 'pug')
-
 app.get('/*', pageController.get);
-
-app.get('/', pageController.get);
 
 app.post('/login', accessPageController.postLogin);
 

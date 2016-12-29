@@ -1,5 +1,5 @@
 "use strict";
-var db = require('../models');
+const db = require('../models');
 
 var HistoryRepository = {
   saveMsg: function(msg) {

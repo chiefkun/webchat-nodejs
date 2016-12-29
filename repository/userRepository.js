@@ -1,5 +1,5 @@
 "use strict";
-var db = require('../models');
+const db = require('../models');
 
 var UserRepository = {
   findByNameAndPass: function(username, password) {

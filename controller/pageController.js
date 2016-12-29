@@ -1,6 +1,6 @@
 "use strict";
-var userRepository = require("../repository/userRepository");
-var historyRepository = require("../repository/historyRepository");
+const userRepository = require("../repository/userRepository");
+const historyRepository = require("../repository/historyRepository");
 
 function getPage(req, res) {
   console.log('IN - Access Page');
