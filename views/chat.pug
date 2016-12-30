@@ -7,7 +7,7 @@ html
     link(rel="stylesheet" type="text/css" href="css/sidebar.css")
     link(rel="stylesheet" type="text/css" href="css/master.css")
     script(src="js/jquery-3.1.1.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script(src="js/bootstrap.min.js")
   body
     div.wrapper.container-fuild
       //- Modal Change user setting
@@ -18,9 +18,24 @@ html
               button.close(type="button" data-dismiss="modal") &times;
               h4.modal-title Setting
             .modal-body
-              p test
+              form.form-horizontal#userSettingForm(action="savesetting" method="post")
+                .form-group#formAva
+                  img(id="settingAva" src=ava alt=name)
+                  br
+                  br
+                  label.btn.btn-default.btn-file#avaBtn Browse
+                    input(type="file" name="avatar" style="display: none;" onchange="readURL(this);")
+                  br
+                .form-group
+                  label.col-sm-2.control-label(for="settinguserName") Username
+                  .col-sm-10
+                    input.form-control(type="text" id="settinguserName" placeholder=uniquename disabled)
+                .form-group
+                  label.col-sm-2.control-label(for="settingName") Name
+                  .col-sm-10
+                    input.form-control(type="text" name="name" id="settingName" placeholder=name)
             .modal-footer
-              button.btn.btn-default(type="button" data-dismiss="modal") Save
+              button.btn.btn-default#saveSettingBtn(type="button") Save
       div.sidebar#sidebar
         form(action="logout" method="post")
           button.btn.btn-inf.btn-lg(type="submit")
@@ -97,3 +112,19 @@ html
           return false;
         }
       });
+
+      $('#saveSettingBtn').click(function(){
+        $('#userSettingForm').submit();
+        return false;
+      });
+
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+            reader.onload = function (e) {
+              $('#settingAva')
+                   .attr('src', e.target.result)
+              };
+            reader.readAsDataURL(input.files[0]);
+          }
+        }

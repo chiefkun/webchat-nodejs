@@ -16,6 +16,11 @@ var UserRepository = {
     return db.User.build({
       username: username, password: password, name: username
     }).save();
+  },
+  updateUser: function(user, name) {
+    return user.update({
+      name: name
+    });
   }
 };
 

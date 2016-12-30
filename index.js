@@ -5,6 +5,7 @@ const config = require('./config/config');
 
 const pageController = require("./controller/pageController.js");
 const accessPageController = require("./controller/accessPageController.js");
+const changeUserInfo = require("./controller/changeUserInfo.js");
 const historyRepository = require("./repository/historyRepository.js");
 
 var express = require('express');
@@ -29,6 +30,8 @@ app.get('/*', pageController.get);
 app.post('/login', accessPageController.postLogin);
 
 app.post('/register', accessPageController.postRegister);
+
+app.post('/savesetting', changeUserInfo.postInfo);
 
 app.post('/logout', function(req, res){
 	console.log("logout");

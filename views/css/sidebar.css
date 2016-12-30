@@ -11,3 +11,17 @@
     transition: 0.5s;
     padding-top: 60px;
 }
+#formAva {
+  text-align: center;
+  margin: auto;
+}
+
+#avaBtn {
+  margin: auto;
+}
+
+#settingAva {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
