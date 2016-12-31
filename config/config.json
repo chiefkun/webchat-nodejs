@@ -1,17 +1,18 @@
 {
   "db": {
     "database": "WEBCHAT",
-    "username": "postgres",
-    "password": "postgres",
+    "username": null,
+    "password": null,
     "options": {
-      "host": "192.168.17.59",
-      "port": 5432,
-      "dialect": "postgres",
+      "host": "localhost",
+      "port": null,
+      "dialect": "sqlite",
       "pool": {
           "min": 0,
           "max": 5,
           "idle": 10000
       },
+      "storage": "./database/WEBCHAT.db",
       "define": {
     		"timestamps": false
     	}
@@ -26,5 +27,9 @@
     "cookie": {
       "maxAge": 60000000
     }
+  },
+  "upload": {
+    "avaPath": "img/",
+    "realAvaPath": "./views/img/"
   }
 }

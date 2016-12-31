@@ -10,11 +10,13 @@
     "body-parser": "^1.15.2",
     "express": "^4.10.2",
     "express-session": "^1.14.2",
+    "multer": "^1.2.1",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
     "pug": "^2.0.0-beta6",
     "sequelize": "^3.27.0",
-    "socket.io": "^1.7.2"
+    "socket.io": "^1.7.2",
+    "sqlite3": "^3.1.8"
   },
   "keywords": [
     "chat"

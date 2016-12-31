@@ -21,6 +21,11 @@ var UserRepository = {
     return user.update({
       name: name
     });
+  },
+  updateAva: function(user, path) {
+    return user.update({
+      avatar: path
+    });
   }
 };
 

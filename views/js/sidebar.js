@@ -17,3 +17,20 @@ function closeSidebar(){
   $("#menu_sidebar_icon").removeClass("fa-chevron-right").addClass("fa-chevron-left");
   $(".back").attr("onclick", "openSidebar()");
 }
+
+$('#saveSettingBtn').click(function(){
+  $('#userSettingForm').submit();
+  return false;
+});
+
+function submitAva(input) {
+  input.form.submit();
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#settingAva')
+             .attr('src', e.target.result)
+        };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }

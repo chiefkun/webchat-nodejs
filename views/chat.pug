@@ -18,14 +18,15 @@ html
               button.close(type="button" data-dismiss="modal") &times;
               h4.modal-title Setting
             .modal-body
-              form.form-horizontal#userSettingForm(action="savesetting" method="post")
+              form.form-horizontal#test(action="uploadAva" method="post" enctype="multipart/form-data")
                 .form-group#formAva
                   img(id="settingAva" src=ava alt=name)
                   br
                   br
                   label.btn.btn-default.btn-file#avaBtn Browse
-                    input(type="file" name="avatar" style="display: none;" onchange="readURL(this);")
-                  br
+                    input(type="file" name="avatar" style="display: none;" onchange="submitAva(this);")
+              form.form-horizontal#userSettingForm(action="savesetting" method="post")
+                br
                 .form-group
                   label.col-sm-2.control-label(for="settinguserName") Username
                   .col-sm-10
@@ -33,7 +34,7 @@ html
                 .form-group
                   label.col-sm-2.control-label(for="settingName") Name
                   .col-sm-10
-                    input.form-control(type="text" name="name" id="settingName" placeholder=name)
+                    input.form-control(type="text" name="name" id="settingName" value=name)
             .modal-footer
               button.btn.btn-default#saveSettingBtn(type="button") Save
       div.sidebar#sidebar
@@ -112,19 +113,3 @@ html
           return false;
         }
       });
-
-      $('#saveSettingBtn').click(function(){
-        $('#userSettingForm').submit();
-        return false;
-      });
-
-      function readURL(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-            reader.onload = function (e) {
-              $('#settingAva')
-                   .attr('src', e.target.result)
-              };
-            reader.readAsDataURL(input.files[0]);
-          }
-        }

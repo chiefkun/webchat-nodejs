@@ -12,5 +12,5 @@ module.exports = function(app, config) {
 
   app.use(session(config.session));
 
-  app.set('view engine', 'pug')
+  app.set('view engine', 'pug');
 };

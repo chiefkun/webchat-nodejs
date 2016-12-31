@@ -33,6 +33,8 @@ app.post('/register', accessPageController.postRegister);
 
 app.post('/savesetting', changeUserInfo.postInfo);
 
+app.post('/uploadAva', changeUserInfo.postAva);
+
 app.post('/logout', function(req, res){
 	console.log("logout");
 	req.session.destroy();
