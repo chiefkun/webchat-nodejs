@@ -20,7 +20,11 @@ module.exports = function (sequelize, DataTypes) {
   	avatar: {
   		type: DataTypes.STRING,
   		defaultValue: config.db.default_ava_path
-  	}
+  	},
+    online: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   },{
   	freezeTableName: true
   });

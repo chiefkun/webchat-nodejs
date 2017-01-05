@@ -1,5 +1,5 @@
 "use strict";
-var userRepository = require("../repository/userRepository");
+const userRepository = require("../repository/userRepository");
 
 function postLogin(req, res) {
   console.log('IN - Post Login');
@@ -26,11 +26,10 @@ function postRegister(req, res) {
 
   userRepository.createUser(username, password)
     .then(function(user) {
-      if(user){
+      if(user) {
         req.session.user = user.username;
         res.redirect('/');
-        // TO DO: catch exception
-  		} else {
+      } else {
   			// TO DO: handle error alert
   			res.redirect('/');
         console.log('OUT - Post Reg: Success');

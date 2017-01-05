@@ -26,6 +26,11 @@ var UserRepository = {
     return user.update({
       avatar: path
     });
+  },
+  updateOnlineStatus: function(user, online) {
+    return user.update({
+      online: online
+    });
   }
 };
 

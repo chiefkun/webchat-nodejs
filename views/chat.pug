@@ -38,8 +38,8 @@ html
             .modal-footer
               button.btn.btn-default#saveSettingBtn(type="button") Save
       div.sidebar#sidebar
-        form(action="logout" method="post")
-          button.btn.btn-inf.btn-lg(type="submit")
+        form#logoutForm(action="logout" method="post")
+          button.btn.btn-inf.btn-lg#logoutBtn(type="submit")
             span.glyphicon.glyphicon-log-out
             |Log out
         button.btn.btn-inf.btn-lg#settingBtn(type="button" data-toggle="modal" data-target="#userSetting")
@@ -111,5 +111,44 @@ html
         if(event.keyCode == 13){
           $("#chat_form").submit();
           return false;
+        }
+      });
+
+      // Request permission
+      document.addEventListener('DOMContentLoaded',function() {
+        if(!Notification){
+          return;
+        }
+        if(Notification.permission !== "granted"){
+          Notification.requestPermission();
+        }
+      });
+
+      // Send log in notification
+      var flag = #{flag};
+      if(flag){
+        socket.emit('login', {name: "#{name}", avatar: "#{ava}"});
+      }
+
+      // Send notification and log out
+      $("#logoutForm").submit(function() {
+        socket.emit('logout', {name: "#{name}", avatar: "#{ava}"});
+        return true;
+      });
+
+      // Listen notification
+      socket.on('notification', function(data){
+        if(Notification.permission !== "granted"){
+          Notification.requestPermission();
+        } else {
+          var notification = new Notification(data.title, {
+            icon: data.icon,
+            body: data.message
+          });
+          notification.onclick = function() {
+            parent.focus()
+            window.focus();
+            this.close();
+          }
         }
       });

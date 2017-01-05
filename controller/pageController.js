@@ -10,7 +10,12 @@ function getPage(req, res) {
         if(user) {
           historyRepository.getHistory(50)
           .then(function(msgList) {
-            res.render('chat', {name: user.name, uniquename: user.username, ava: user.avatar, msgList: msgList, sessionname: req.session.user});
+            var flag = false;
+            if(!user.online){
+              userRepository.updateOnlineStatus(user, true);
+              flag = true;
+            }
+            res.render('chat', {name: user.name, uniquename: user.username, ava: user.avatar, msgList: msgList, sessionname: req.session.user, flag: flag});
             res.end();
             console.log('OUT - Access Page');
           });
@@ -26,4 +31,22 @@ function getPage(req, res) {
 	}
 };
 
-module.exports = { get: getPage };
+function logout(req, res) {
+  console.log('IN - Logout Page');
+  userRepository.findByUsername(req.session.user)
+    .then(function(user) {
+      if(user) {
+        userRepository.updateOnlineStatus(user, false)
+          .then(function(user) {
+            req.session.destroy();
+          	res.redirect('/');
+            console.log('OUT - Logout Page');
+          });
+      } else {
+        res.redirect('/');
+        console.log('OUT - Logout Page');
+      }
+    });
+  };
+
+module.exports = { get: getPage, logout: logout };
