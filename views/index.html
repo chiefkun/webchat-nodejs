@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Test</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/cupertino/jquery-ui.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script>
+	$( function() {
+		$("#popup-outline").draggable({appendTo: 'body',
+		containment: 'window',
+		scroll: false});
+		$("#popup-resize").resizable({
+			animate: true
+		});
+	} );
+	</script>
+	<style>*{outline:0;}#popup-outline{box-shadow:0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19)}.ui-resizable-helper{border:1px dotted gray}
+	</style>
+</head>
+<body>
+	<a href="https://youtu.be/B08iLAtS3AQ">Click</a>
+	<a href="https://www.youtube.com/watch?v=B08iLAtS3AQ">Click</a>
+	<br>
+	<div id="popup-outline" style="display: none;border-radius: 15px 15px 0 0">
+		<div class="modal-header" style="padding: 5px 5px 0 0">
+			<button type="button" class="close" onclick="closePopup()" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
+			<button type="button" class="close" onclick="resizePopup()" data-dismiss="modal"><span class="glyphicon glyphicon-unchecked"></span></button>
+			<div id="dl-content" class="form-group form-inline" style="margin:0 0 0 10px;display:none">
+				<a href="" id="dl-btn" download><span class="glyphicon glyphicon-download-alt"></span></a>
+				<select class="form-control input-sm" id="dl" style="width:140px">
+				</select>
+			</div>
+		</div>
+		<div id="popup-resize" class="modal-content" style="padding:0;min-width:300px;min-height:150px;height:150px">
+		</div>
+	</div>
+	<script type="text/javascript">
+	$("a").contextmenu(function() {
+		return popup(this.href);
+	});
+	function popup(link) {
+		var res = link.match(/.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/i);
+		if(res){
+			$("#popup-resize").append('<iframe id="ytif" width="560" height="315" src="https://www.youtube.com/embed/'+res[1]+'?rel=0&autoplay=1" frameborder="0" style="position: relative; height: 100%; width: 100%;min-width:300px;min-height:150px" allowfullscreen></iframe>');
+			var pop = document.getElementById("popup-outline");
+			pop.style.display = "inline-block";
+			$.ajax({
+				url: "http://www.youtube.com/get_video_info?video_id="+res[1],
+				dataType: 'text'
+			}).done(function(res) {
+				var data = parseStr(res);
+				var streams = data['url_encoded_fmt_stream_map'].split(",");
+				for (var idx = 0; idx < streams.length; idx++){
+					var realStream = parseStr(streams[idx]);
+					var stype = realStream['type'];
+					if(stype.indexOf(';') > -1) {
+						var tmp = stype.split(";");
+						stype = tmp[0];
+					}
+					if(typeof realStream['sig'] == "undefined") {
+						var sl = document.getElementById("dl");
+						var option = document.createElement("option");
+						option.text = realStream['quality'] + '  ' + stype;
+						option.value = realStream['url'];
+						sl.add(option);
+					} else {
+						var sl = document.getElementById("dl");
+						var option = document.createElement("option");
+						option.text = realStream['quality'] + '  ' + stype;
+						option.value = realStream['url'] + "&signature=" + realStream['sig'];
+						sl.add(option);
+					}
+				}
+				var elem = document.getElementById("dl");
+				selectedNode = elem.options[elem.selectedIndex];
+				$('#dl-btn').attr("href", selectedNode.value);
+				document.getElementById("dl-content").style.display = "inline-block";
+			});
+			return false;
+		}
+		return true;
+	}
+
+	$( "#dl" ).change(function() {
+		var elem = document.getElementById("dl");
+		selectedNode = elem.options[elem.selectedIndex];
+		$('#dl-btn').attr("href", selectedNode.value);
+	});
+
+	function resizePopup() {
+		var pop = document.getElementById("popup-resize");
+		var ifr = document.getElementById("ytif");
+		pop.style.width = "300px";
+		pop.style.height = "150px";
+	}
+	function closePopup() {
+		document.getElementById("popup-outline").style.display = "none";
+		document.getElementById("dl-content").style.display = "none";
+		$("#ytif").remove();
+		document.getElementById('dl').options.length = 0;
+		$('#dl-btn').attr("href", "#");
+	}
+	function parseStr(str) {
+		var result = {};
+		str.split("&").forEach(function(part) {
+			var item = part.split("=");
+			result[item[0]] = decodeURIComponent(item[1]);
+		});
+		return result;
+	}
+	</script>
+</body>
+</html>
